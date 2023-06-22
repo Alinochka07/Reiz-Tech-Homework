@@ -1,0 +1,12 @@
+@import "./_flexBox.scss";
+@import "./_variables.scss";
+
+* {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: $fontColor;
+}
+.App {
+    width: 100%;
+    background: $backgroundColor;
+}

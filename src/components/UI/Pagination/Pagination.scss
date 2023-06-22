@@ -1,0 +1,24 @@
+@import "../../../styles/_flexBox";
+@import "../../../styles/variables";
+
+.page__wrap {
+    margin-top: 30px;
+    .page {
+        padding: 5px;
+        border: 1px solid white;
+        border-radius: 0.5em;
+        width: 35px;
+        text-align: center;
+        background-color: $buttonColor;
+        color: white;
+        cursor: pointer;
+    }
+    .page__current {
+        border: 1px solid white;
+        width: 35px;
+        background-color: orange;
+        font-weight: bold;
+        border-radius: 0.5em;
+    }
+}
+

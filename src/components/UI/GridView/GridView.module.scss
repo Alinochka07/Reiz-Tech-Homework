@@ -1,0 +1,20 @@
+@import "../../../styles/_flexBox";
+@import "../../../styles/variables";
+
+.MyGridView {
+    background-color: $boxViewBackgroundColor;
+    margin: 1em;
+    width: 18rem;
+    height: 7rem;
+    border-radius: 0.5em;
+    padding: 1.5em;
+
+    .GridInfo {
+        width: 400px;
+        .GridImg {
+            width: 108px;
+            height: 70px;
+        }
+    }
+    
+} 

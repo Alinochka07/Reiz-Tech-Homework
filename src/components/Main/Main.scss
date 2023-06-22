@@ -1,0 +1,22 @@
+@import "../../styles/variables";
+
+.main__content {
+    .main__content__filter {
+        .filter {
+            width: 100%;
+            margin: 0 5em;
+        }
+    }
+}
+
+
+.list, .grid {
+    border: 1px solid $buttonColor;
+    width: 2.5em;
+    height: 2.3em;
+    cursor: pointer;
+    margin: 0 1em;
+    background-color: white;
+    border-radius: 0.5em;
+}
+
