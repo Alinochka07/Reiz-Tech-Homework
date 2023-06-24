@@ -1,183 +1,153 @@
-import React, {useState, useEffect, useRef, useMemo} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import FetchData from '../../API/FetchData';
-import {getPageCount, getPagesArray} from '../utils/pageCount';
-import "./Main.scss";
-import Button from '../UI/Button/Button';
+import './Main.scss';
 import Select from '../UI/Select/Select';
 import GridViewIcon from '../../icons/grid.png';
 import ListViewIcon from '../../icons/list.png';
-import GridView from "../UI/GridView/GridView";
+import GridView from '../UI/GridView/GridView';
 import ListView from '../UI/ListView/ListView';
 import Pagination from '../UI/Pagination/Pagination';
 
 
 const sortByName = [
-    {value: "A - Z"},
-    {value: "Z - A"}
-]
+    {value: 'A - Z'},
+    {value: 'Z - A'},
+];
 
 const sortByArea = [
-    {value: "Filter by area"},
-    {value: "Smaller than Lithuania"},
-    {value: "Bigger than Lithuania"},
-]
+    {value: 'All areas'},
+    {value: 'Smaller than Lithuania'},
+    {value: 'Bigger than Lithuania'},
+];
 
 const sortByRegion = [
-    {value: "Filter by region"},
-    {value: "Africa", },
-    {value: "Americas"},
-    {value: "Antarctic"},
-    {value: "Asia"},
-    {value: "Europe"},
-    {value: "Oceania"},
-   
-]
-
-
+    {value: 'All regions'},
+    {value: 'Africa'},
+    {value: 'Americas'},
+    {value: 'Antarctic'},
+    {value: 'Asia'},
+    {value: 'Europe'},
+    {value: 'Oceania'},
+];
 
 
 
 const Main = () => {
 
-    const [countries, setCountries] = useState([]);
     const [filteredCountries, setFilteredCountries] = useState([]);
-    const [filter, setFilter] = useState({sort: '', query: ''});
-    const [modal, setModal] = useState(false);
-    const [totalPages, setTotalPages] = useState(0);
-    const [limit, setLimit] = useState(25);
-    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(21);
+    const [limit, setLimit] = useState(12);
+    const [pageNumber, setPageNumber] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [view, setView] = useState(false);
-    const [sortType, setSortedType] = useState('default');
-    const [sortArea, setSortArea] = useState('default');
-    const [filterRegion, setFilterRegion] = useState('default');
+    const [sortType, setSortedType] = useState('A - Z');
+    const [sortArea, setSortArea] = useState('All areas');
+    const [filterRegion, setFilterRegion] = useState('All regions');
 
 
-    // const fetchAllCountries = async () => {
-    //     try {
-    //         setIsLoading(true);
-    //         const response = await FetchData.getAllCountries(limit)
-    //         setCountries([...response]);
-    //         const totalCount = response.length
-    //         setTotalPages(Math.ceil(totalCount / limit))
-    //     } catch(err) {
-    //         setError(err)
-    //         setIsLoading(false)
-    //         console.log(error.message)
-    //     }
-    // }
 
     const fetchFilteredCountries = async () => {
         try {
-            setIsLoading(true);
-            const response = await FetchData.getByNameRegionArea()
-            setFilteredCountries([...response]);
-        } catch(err) {
-            setError(err)
-            setIsLoading(false)
-            console.log(error.message)
+        setIsLoading(true);
+        const response = await FetchData.getByNameRegionArea();
+        setFilteredCountries([...response]);
+        setTotalPages(Math.ceil(response.length / limit));
+        } catch (err) {
+        setError(err);
+        setIsLoading(false);
+        console.log(error.message);
         }
-    }
+    };
+
+    useEffect(() => {
+        fetchFilteredCountries();
+    }, []);
+
+    const handlePreviousPage = () => {
+        setPageNumber((previousPageNumber) => previousPageNumber - 1);
+    };
+
+    const handleNextPage = () => {
+        setPageNumber((previousPageNumber) => previousPageNumber + 1);
+    };
+  
 
     const sortedCountries = useMemo(() => {
         let result = filteredCountries;
 
-        if(sortType === 'A - Z') {
-            result = [...filteredCountries].sort((a, b) => {
-                return a.name.localeCompare(b.name);
-            });
+        if (sortType === 'A - Z') {
+        result = [...filteredCountries].sort((a, b) => {
+            return a.name.common.localeCompare(b.name.common);
+        });
         } else if (sortType === 'Z - A') {
-            result = [...filteredCountries].sort((a, b) => {
-                return b.name.localeCompare(a.name)
-            })
+        result = [...filteredCountries].sort((a, b) => {
+            return b.name.common.localeCompare(a.name.common);
+        });
         }
         return result;
-    }, [filteredCountries, sortType])
+
+    }, [filteredCountries, sortType]);
 
 
     const sortedCountriesByArea = useMemo(() => {
-        let result = filteredCountries;
+        let result = sortedCountries;
 
-        if(sortArea === 'Smaller than Lithuania') {
-            result = filteredCountries.filter((countryArea) => countryArea.area < 65300);
-            return result
+        if (sortArea === 'Smaller than Lithuania') {
+            result = sortedCountries.filter((countryArea) => countryArea.area < 65300);
         } else if (sortArea === 'Bigger than Lithuania') {
-            result = filteredCountries.filter((countryArea) => countryArea.area > 65300);
-            return result;
-        }
-    }, [filteredCountries, sortArea])
+            result = sortedCountries.filter((countryArea) => countryArea.area > 65300);
+        } 
+        return result;
+    }, [sortedCountries, sortArea]);
+
 
 
     const filterCountriesByRegion = useMemo(() => {
-        let result = filteredCountries;
+        let result = sortedCountriesByArea;
 
-        if(filterRegion === 'Africa') {
-            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Africa');
-            return result;
-        } else if(filterRegion === 'Americas') {
-            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Americas');
-            return result;
-        } else if(filterRegion === 'Antarctic') {
-            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Antarctic');
-            return result;
-        } else if(filterRegion === 'Asia') {
-            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Asia');
-            return result;
-        } else if(filterRegion === 'Europe') {
-            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Europe');
-            return result;
-        } else if(filterRegion === 'Oceania') {
-            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Oceania');
-            return result;
-        }
-    }, [filteredCountries, filterRegion])
+        if (filterRegion !== 'All regions') {
+        result = sortedCountriesByArea.filter((countryRegion) => countryRegion.region === filterRegion);
+        } 
 
-    
+        return result;
+    }, [sortedCountriesByArea, filterRegion]);
 
-    useEffect(() => {
-        // fetchAllCountries()
-        fetchFilteredCountries()
-   },[page])
-
-   
-
-
-    const changePage = (page) => {
-        setPage(page)
-    }
 
   
-    console.log(sortType, sortArea, filterRegion)
+  const startIndex = (pageNumber - 1) * limit;
+  const endIndex = startIndex + limit;
 
-    return (
+  const paginatedCountries = filterCountriesByRegion.slice(startIndex, endIndex);
+
+  return (
         <main>
-            <div className='main__content'>
-                <div className='main__content__filter'>
-                    <div className='filter flex flex-jc-fs'>
-                        <Select defaultValue="default" onChange={(e) => setSortedType(e.target.value)}>
+            <div className="main__content flex flex-fw-w">
+                <div className="main__content__filter flex">
+                    <div className='filter flex flex-jc-fe flex-fw-w'>
+                        <Select defaultValue="A - Z" onChange={(e) => setSortedType(e.target.value)}>
                             {sortByName.map(sort => {
-                                return <option key={sort.value} value={sort.value} className='option'>{sort.value}</option>
+                                return <option key={sort.value} value={sort.value}>{sort.value}</option>
                             })}
                         </Select>
 
-                        <Select defaultValue='default' onChange={(e) => setFilterRegion(e.target.value)}>
+                        <Select defaultValue='All regions' label='Filter by region' onChange={(e) => setFilterRegion(e.target.value)}>
                             {sortByRegion.map(sortRegion => {
-                                return <option key={sortRegion.value} value={sortRegion.value} className="option">{sortRegion.value}</option>
+                                return <option key={sortRegion.value} value={sortRegion.value}>{sortRegion.value}</option>
                             })}
                         </Select>
 
-                        <Select defaultValue="default" onChange={(e) => setSortArea(e.target.value)}>
+                        <Select defaultValue="All areas" onChange={(e) => setSortArea(e.target.value)}>
                             {sortByArea.map(area => {
-                                return <option key={area.value} value={area.value} className="option">{area.value}</option>
+                                return <option key={area.value} value={area.value}>{area.value}</option>
                             })}
                         </Select>
 
                         {view === true  ?
                             <button onClick={() => setView(false)} 
-                                    className='grid flex flex-ai-c flex-jc-c'>
-                                        <img width="18px" alt='grid-view-icon' 
-                                        src={GridViewIcon}/>
+                                className='grid flex flex-ai-c flex-jc-c'>
+                                    <img width="18px" alt='grid-view-icon' 
+                                    src={GridViewIcon}/>
                             </button>
                             :
                             <button onClick={() => setView(true)} 
@@ -185,95 +155,38 @@ const Main = () => {
                                         <img width="18px" alt='list-view-icon' 
                                         src={ListViewIcon}/>
                             </button>
-                        }
+                         }
+                     </div>
+                </div>
+                <div className='main__listing flex flex-fw-w'>
+                {!isLoading ? (
+                    <div>Please wait, data is loading...</div>
+                ) 
+                : 
+                    <div className="countries__list flex flex-fw-w flex-jc-c">
+                        {paginatedCountries.map((country, i) => {
+                        return view === true ? (
+                        <ListView index={i + 1} country={country} key={i} />
+                        ) : (
+                        <GridView index={i + 1} country={country} key={i} />
+                        );
+                    })}
                     </div>
-                    <div>
-                    {!isLoading ? 
-                        <div>Please wait, data is loading...</div>
-                        :
-                        <div className='countries__list flex flex-fw-w flex-jc-c'>
-                            {
-                            (sortedCountries && sortedCountriesByArea && filterCountriesByRegion) ?
-                                sortedCountries
-                                .filter(country => sortedCountriesByArea.includes(country) && filterCountriesByRegion.includes(country))
-                                .map((country, i) => {
-                                return view === true ?
-                                    <ListView index={i+1} country={country} key={i} />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                            :
-
-                            (sortedCountries && sortedCountriesByArea) ?
-                                sortedCountries
-                                .filter(country => sortedCountriesByArea.includes(country))
-                                .map((country, i) => {
-                                    return view === true ?
-                                    <ListView index={i+1} country={country} key={i} />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                            :
-                            
-                            (sortedCountries && filterCountriesByRegion) ?
-                                sortedCountries
-                                .filter(country => filterCountriesByRegion.includes(country))
-                                .map((country, i) => {
-                                    return view === true ?
-                                    <ListView index={i+1} country={country} key={i} />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                            :
-
-                            (sortedCountriesByArea && filterCountriesByRegion) ?
-                                sortedCountriesByArea
-                                .filter(country => filterCountriesByRegion.includes(country))
-                                .map((country, i) => {
-                                    return view === true ?
-                                    <ListView index={i+1} country={country} key={i} />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                            :
-
-                            sortedCountries ?
-                                sortedCountries.map((country, i) => {
-                                return view === true ?
-                                    <ListView index={i+1} country={country} key={i} />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                            :
-                            sortedCountriesByArea ?
-                                sortedCountriesByArea.map((country, i) => {
-                                return view === true ?
-                                    <ListView index={i+1} country={country} key={i} />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                            : 
-
-                            filterCountriesByRegion ?
-                                filterCountriesByRegion.map((country, i) => {
-                                return view === true ?
-                                    <ListView index={i+1} country={country} key={i} />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                            : null
-                            }
-                        </div>
-                    }
-                    </div>
+                }
                 </div>
             </div>
-           
-            <Pagination
-                page={page}
-                totalPages={totalPages}
-                changePage={changePage}
-            />
+            <div className='pagination__content flex flex-jc-c'>
+                <Pagination
+                    filteredCountries={filteredCountries}
+                    sortedCountries={sortedCountries}
+                    sortedCountriesByArea={sortedCountriesByArea}
+                    filterCountriesByRegion={filterCountriesByRegion}
+                    handlePreviousPage={handlePreviousPage}
+                    handleNextPage={handleNextPage}
+                    pageNumber={pageNumber} 
+                    endIndex={endIndex}
+                />
+            </div>
         </main>
     );
 };

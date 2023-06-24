@@ -5,15 +5,23 @@
     background-color: $boxViewBackgroundColor;
     margin: 1em;
     width: 18rem;
-    height: 7rem;
+    height: 9rem;
     border-radius: 0.5em;
     padding: 1.5em;
+    @media screen and (max-width:450px) {
+        font-size: smaller;
+        width: 47%;
+    }
 
     .GridInfo {
         width: 400px;
         .GridImg {
             width: 108px;
             height: 70px;
+            @media screen and (max-width:400px) {
+                width: 60px;
+                height: 50px;
+            }
         }
     }
     

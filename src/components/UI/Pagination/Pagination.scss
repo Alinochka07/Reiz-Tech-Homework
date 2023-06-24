@@ -3,22 +3,12 @@
 
 .page__wrap {
     margin-top: 30px;
-    .page {
-        padding: 5px;
-        border: 1px solid white;
-        border-radius: 0.5em;
-        width: 35px;
-        text-align: center;
-        background-color: $buttonColor;
-        color: white;
-        cursor: pointer;
+    width: 30%;
+    button:first-child {
+        margin-right: 4%;
     }
-    .page__current {
-        border: 1px solid white;
-        width: 35px;
-        background-color: orange;
-        font-weight: bold;
-        border-radius: 0.5em;
+    @media screen and (max-width: 750px) {
+        width: 80%;
     }
 }
 

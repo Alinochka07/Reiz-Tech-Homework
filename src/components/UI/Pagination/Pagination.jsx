@@ -1,41 +1,25 @@
 import React from 'react';
-import {getPagesArray} from '../../utils/pageCount';
 import "./Pagination.scss";
+import Button  from '../../UI/Button/Button';
 
 
 
-const Pagination = ({totalPages, page, changePage}) => {
-    const pagesArray = getPagesArray(totalPages);
+const Pagination = ({handlePreviousPage, handleNextPage, pageNumber, endIndex, filteredCountries, sortedCountries, sortedCountriesByArea, filterCountriesByRegion}) => {
+
     
-    if (totalPages <= 0) {
-        return null;
-    }
-   
     return (
-        <div className='page__wrap flex flex-jc-c'>
-      {page > 1 && (
-        <span onClick={() => changePage(page - 1)} className='page'>
-          Previous
-        </span>
-      )}
-      {pagesArray.map((p, i) => {
-        return (
-          <span
-            key={i}
-            onClick={() => changePage(p)}
-            className={page === p ? 'page page__current' : 'page'}
-          >
-            {p}
-          </span>
-        );
-      })}
-      {page < totalPages && (
-        <span onClick={() => changePage(page + 1)} className='page'>
-          Next
-        </span>
-      )}
-    </div>
+        <div className='page__wrap flex flex-jc-se'>
+            <Button onClick={handlePreviousPage} disabled={pageNumber === 1}>Previous page</Button>
+            <Button onClick={handleNextPage} 
+                disabled={endIndex >= (
+                    sortedCountries? sortedCountries.length : filteredCountries.length,
+                    sortedCountriesByArea ? sortedCountriesByArea.length : filteredCountries.length,
+                    filterCountriesByRegion ? filterCountriesByRegion.length : filteredCountries.length
+                    )}
+            >Next page</Button>
+        </div>
     );
+
 };
 
 export default Pagination;

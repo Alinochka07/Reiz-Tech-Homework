@@ -5,8 +5,15 @@
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     color: $fontColor;
+    text-decoration: none;
 }
 .App {
     width: 100%;
     background: $backgroundColor;
+    .bold {
+        font-weight: 600;
+    }
+    .home {
+        width: 100%;
+    }
 }

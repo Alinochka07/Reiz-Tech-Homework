@@ -7,12 +7,13 @@ const ListView = ({children, ...props}) => {
     return (
         <div {...props} className={`${classes.MyListView} flex`}>
             <div className={classes.ListInfo}>
-                <div className={`${classes.ListInfoDetail} flex flex-jc-fs flex-fd-c`}>
-                    <h3>{index}. {country.name}</h3>
+                <div className={`${classes.ListInfoDetail}`}>
+                    <h3>{country.name.common}</h3>
+                    <p><span className='bold'>Capital:</span> {country.capital}</p>
                     
                 </div>
                 <div className={`${classes.ListInfoDetail} flex flex-jc-fs flex-fd-c`}>
-                    <p>Capital: {country.capital}</p>
+                    
                 </div>
                 <div className={`${classes.ListInfoDetail} flex flex-jc-fs flex-fd-c`}>
                     <p>Region: {country.region}</p>
@@ -20,7 +21,7 @@ const ListView = ({children, ...props}) => {
                 </div>
                 <Button>Click for more</Button>
             </div>
-            <img className={classes.ListImg} alt='country-flag' src={country.flag}/>
+            <img className={classes.ListImg} alt='country-flag' src={country.flags.png}/>
             
                 {children}
         </div>
