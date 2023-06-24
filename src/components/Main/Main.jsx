@@ -51,6 +51,7 @@ const Main = () => {
     const [view, setView] = useState(false);
     const [sortType, setSortedType] = useState('default');
     const [sortArea, setSortArea] = useState('default');
+    const [filterRegion, setFilterRegion] = useState('default');
 
 
     // const fetchAllCountries = async () => {
@@ -107,6 +108,31 @@ const Main = () => {
         }
     }, [filteredCountries, sortArea])
 
+
+    const filterCountriesByRegion = useMemo(() => {
+        let result = filteredCountries;
+
+        if(filterRegion === 'Africa') {
+            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Africa');
+            return result;
+        } else if(filterRegion === 'Americas') {
+            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Americas');
+            return result;
+        } else if(filterRegion === 'Antarctic') {
+            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Antarctic');
+            return result;
+        } else if(filterRegion === 'Asia') {
+            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Asia');
+            return result;
+        } else if(filterRegion === 'Europe') {
+            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Europe');
+            return result;
+        } else if(filterRegion === 'Oceania') {
+            result = filteredCountries.filter((countryRegion) => countryRegion.region === 'Oceania');
+            return result;
+        }
+    }, [filteredCountries, filterRegion])
+
     
 
     useEffect(() => {
@@ -122,7 +148,7 @@ const Main = () => {
     }
 
   
-    console.log(sortType, sortArea)
+    console.log(sortType, sortArea, filterRegion)
 
     return (
         <main>
@@ -135,9 +161,9 @@ const Main = () => {
                             })}
                         </Select>
 
-                        <Select>
+                        <Select defaultValue='default' onChange={(e) => setFilterRegion(e.target.value)}>
                             {sortByRegion.map(sortRegion => {
-                                return <option key={sortRegion.value} value={sortRegion.value} defaultValue={sortRegion.selected === true} className="option">{sortRegion.value}</option>
+                                return <option key={sortRegion.value} value={sortRegion.value} className="option">{sortRegion.value}</option>
                             })}
                         </Select>
 
@@ -166,9 +192,10 @@ const Main = () => {
                         <div>Please wait, data is loading...</div>
                         :
                         <div className='countries__list flex flex-fw-w flex-jc-c'>
-                            {(sortedCountries && sortedCountriesByArea) ?
+                            {
+                            (sortedCountries && sortedCountriesByArea && filterCountriesByRegion) ?
                                 sortedCountries
-                                .filter(country => sortedCountriesByArea.includes(country))
+                                .filter(country => sortedCountriesByArea.includes(country) && filterCountriesByRegion.includes(country))
                                 .map((country, i) => {
                                 return view === true ?
                                     <ListView index={i+1} country={country} key={i} />
@@ -176,6 +203,40 @@ const Main = () => {
                                     <GridView index={i+1} country={country} key={i} />
                                 })
                             :
+
+                            (sortedCountries && sortedCountriesByArea) ?
+                                sortedCountries
+                                .filter(country => sortedCountriesByArea.includes(country))
+                                .map((country, i) => {
+                                    return view === true ?
+                                    <ListView index={i+1} country={country} key={i} />
+                                    : 
+                                    <GridView index={i+1} country={country} key={i} />
+                                })
+                            :
+                            
+                            (sortedCountries && filterCountriesByRegion) ?
+                                sortedCountries
+                                .filter(country => filterCountriesByRegion.includes(country))
+                                .map((country, i) => {
+                                    return view === true ?
+                                    <ListView index={i+1} country={country} key={i} />
+                                    : 
+                                    <GridView index={i+1} country={country} key={i} />
+                                })
+                            :
+
+                            (sortedCountriesByArea && filterCountriesByRegion) ?
+                                sortedCountriesByArea
+                                .filter(country => filterCountriesByRegion.includes(country))
+                                .map((country, i) => {
+                                    return view === true ?
+                                    <ListView index={i+1} country={country} key={i} />
+                                    : 
+                                    <GridView index={i+1} country={country} key={i} />
+                                })
+                            :
+
                             sortedCountries ?
                                 sortedCountries.map((country, i) => {
                                 return view === true ?
@@ -191,34 +252,19 @@ const Main = () => {
                                     : 
                                     <GridView index={i+1} country={country} key={i} />
                                 })
+                            : 
+
+                            filterCountriesByRegion ?
+                                filterCountriesByRegion.map((country, i) => {
+                                return view === true ?
+                                    <ListView index={i+1} country={country} key={i} />
+                                    : 
+                                    <GridView index={i+1} country={country} key={i} />
+                                })
                             : null
                             }
                         </div>
                     }
-                    {/* {!isLoading ? 
-                        <div>Please wait, data is loading...</div>
-                        :
-                        <div class='countries__list flex flex-fw-w flex-jc-c'>
-                            {sortedCountries ?
-                            sortedCountries.map((country, i) => {
-                                return view === true ?
-                                <ListView index={i+1} country={country} key={i}  />
-                                : 
-                                <GridView index={i+1} country={country} key={i} />
-                            })
-                            :
-                            sortedCountriesByArea ?
-                                sortedCountriesByArea.map((country, i) => {
-                                return view === true ?
-                                    <ListView index={i+1} country={country} key={i}  />
-                                    : 
-                                    <GridView index={i+1} country={country} key={i} />
-                                })
-                                : null
-                            }
-                        </div>
-                        } */}
-                        
                     </div>
                 </div>
             </div>
