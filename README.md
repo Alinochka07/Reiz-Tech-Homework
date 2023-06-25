@@ -3,6 +3,9 @@
 This project was built on JavaScript's React.js Framework.
 The purpose of this assignment is to retrieve data from <a href='https://restcountries.com/v3.1/all'>www.restcountries.com/v3.1/all</a> RESTful API and display items properly with some information about these items.
 
+# Deployed version
+This app is deployed on https://reiz-tech-homework.vercel.app/
+
 ## Available Scripts
 
 In the project directory, you can run:
