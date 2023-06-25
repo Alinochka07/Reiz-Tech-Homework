@@ -46,7 +46,6 @@ const Main = () => {
     const [filterRegion, setFilterRegion] = useState('All regions');
 
 
-
     const fetchFilteredCountries = async () => {
         try {
         setIsLoading(true);
@@ -115,10 +114,11 @@ const Main = () => {
 
 
   
-  const startIndex = (pageNumber - 1) * limit;
-  const endIndex = startIndex + limit;
+    const startIndex = (pageNumber - 1) * limit;
+    const endIndex = startIndex + limit;
 
-  const paginatedCountries = filterCountriesByRegion.slice(startIndex, endIndex);
+    const paginatedCountries = filterCountriesByRegion.slice(startIndex, endIndex);
+
 
   return (
         <main>
@@ -166,9 +166,12 @@ const Main = () => {
                     <div className="countries__list flex flex-fw-w flex-jc-c">
                         {paginatedCountries.map((country, i) => {
                         return view === true ? (
-                        <ListView index={i + 1} country={country} key={i} />
+                        <ListView 
+                            index={i + 1} country={country} key={i} />
                         ) : (
-                        <GridView index={i + 1} country={country} key={i} />
+                        <GridView  
+                            index={i + 1} country={country} key={i} >
+                            </GridView>
                         );
                     })}
                     </div>
@@ -187,6 +190,7 @@ const Main = () => {
                     endIndex={endIndex}
                 />
             </div>
+
         </main>
     );
 };

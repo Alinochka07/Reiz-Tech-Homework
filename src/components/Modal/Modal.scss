@@ -1,0 +1,40 @@
+@import "../../styles/flexBox";
+@import "../../styles/variables";
+
+
+.modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    
+    .modal__content {
+        width: 30rem;
+        padding: 10px;
+        background: $backgroundColor;
+        border-radius: 0.5em;
+    }
+    .modal__header, .modal__body, .modal__footer {
+        padding: 10px;
+    }
+    .modal__footer {
+        button {
+            width: 23%;
+        }
+    }
+    .modal__body {
+        div {
+            .modal__img {
+                width: 14rem;
+                height: 9rem;
+                @media screen and (max-width:500px) {
+                    width: 7rem;
+                    height: 4.5rem;
+                }
+            }
+
+        }
+    }
+}

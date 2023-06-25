@@ -1,0 +1,30 @@
+nav.navbar {
+    width: 100%;
+    height: 70px;
+    background: #2c892c;
+    position: fixed;
+    div {
+        
+        h1 {
+            padding: 5vh 5vw;
+            cursor: pointer;
+            width: 100%;
+            color: white;
+            @media screen and (max-width:500px) {
+    
+                text-align: center;
+                font-size: smaller;
+                justify-content: center;
+            }
+        }
+    }
+    .navbar__menu {
+        width: 50%;
+        margin-right: 5%;
+        .menu {
+            margin-right: 5%;
+            color: white;
+            cursor: pointer;
+        }
+    }
+}

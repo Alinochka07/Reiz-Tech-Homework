@@ -13,7 +13,7 @@ export default class FetchData {
     }
 
     static async getByNameRegionArea() {
-        const response = await axios.get(`${baseURL}?fields=name,region,capital,area,flags`)
+        const response = await axios.get(`${baseURL}?fields=name,region,capital,area,flags,currencies,population,timezones,languages`)
         return response.data
     }
 }

@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import classes from "./ListView.module.scss";
 import Button from '../Button/Button';
+import ModalWindow from '../../Modal/ModalWindow';
+
 
 const ListView = ({children, ...props}) => {
-    const {country, index} = props
+    const [showModal, setShowModal] = useState(false);
+    const {country} = props;
+
+    const onCloseModal = () => {setShowModal(false)}
+    
     return (
         <div {...props} className={`${classes.MyListView} flex`}>
             <div className={classes.ListInfo}>
@@ -19,11 +25,14 @@ const ListView = ({children, ...props}) => {
                     <p>Region: {country.region}</p>
                     <p>Area: {country.area}</p>
                 </div>
-                <Button>Click for more</Button>
+                
             </div>
-            <img className={classes.ListImg} alt='country-flag' src={country.flags.png}/>
-            
+            <div className={`${classes.ListImgBtn} flex flex-ai-c flex-jc-sb`}>
+                <Button onClick={() => setShowModal(true)}>Click for more</Button>
+                <img className={classes.ListImg} alt='country-flag' src={country.flags.png}/>
+            </div>
                 {children}
+            <ModalWindow showModal={showModal} country={country} onCloseModal={onCloseModal} />
         </div>
     );
 };

@@ -3,8 +3,8 @@ import "./Footer.scss";
 
 const Footer = () => {
     return (
-        <footer>
-            
+        <footer className='flex flex-jc-c'>
+            <p>Homework for REIZ TECH. Created by Alina Akylbekova</p>
         </footer>
     );
 };
