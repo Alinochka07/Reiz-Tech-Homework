@@ -19,7 +19,7 @@ const Navbar = () => {
             </div>
             <div className='navbar__menu flex flex-jc-fe flex-ai-c'>
                 {myRoutes.map(routeMenu => {
-                    return <div className='menu' onClick={() => (navigate(routeMenu.path), window.location.reload())} key={routeMenu.name}>{routeMenu.name}</div>
+                    return <div className='menu' onClick={() => navigate(routeMenu.path)} key={routeMenu.name}>{routeMenu.name}</div>
                 })}
             </div>
         </nav>
