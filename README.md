@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+# About this project 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was built on JavaScript's React.js Framework.
+The purpose of this assignment is to retrieve data from <a href='https://restcountries.com/v3.1/all'>www.restcountries.com/v3.1/all</a> RESTful API and display items properly with some information about these items.
 
 ## Available Scripts
 
